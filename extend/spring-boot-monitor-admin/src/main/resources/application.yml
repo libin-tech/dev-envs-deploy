@@ -13,15 +13,15 @@ spring:
         url: http://172.30.0.90:9090
         instance:
           service-host-type: IP
-        username: libin-admin
-        password: libin-admin
+        username: admin
+        password: admin123456
 
 --- # 监控中心服务端配置
 spring:
   security:
     user:
-      name: libin-admin
-      password: libin-admin
+      name: admin
+      password: admin123456
   boot:
     admin:
       context-path: /admin
