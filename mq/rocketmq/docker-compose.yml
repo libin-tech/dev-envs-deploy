@@ -1,0 +1,151 @@
+version: '3'
+
+# 指定ip容器内部相互访问
+networks:
+  rmq:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+
+services:
+  rmqnamesrv-a:
+    image: apache/rocketmq:4.9.3
+    container_name: rmqnamesrv-a
+    ports:
+      - '9876:9876'
+    volumes:
+      - ./logs/nameserver-a:/home/rocketmq/logs/rocketmqlogs
+      - ./store/nameserver-a:/home/rocketmq/store
+    command: sh mqnamesrv
+    networks:
+      rmq:
+        ipv4_address: 172.28.0.8
+        aliases:
+          - rmqnamesrv-a
+
+  rmqnamesrv-b:
+    image: apache/rocketmq:4.9.3
+    container_name: rmqnamesrv-b
+    ports:
+      - '9877:9876'
+    volumes:
+      - ./logs/nameserver-b:/home/rocketmq/logs/rocketmqlogs
+      - ./store/nameserver-b:/home/rocketmq/store
+    command: sh mqnamesrv
+    networks:
+      rmq:
+        ipv4_address: 172.28.0.9
+        aliases:
+          - rmqnamesrv-b
+
+  rmqbroker-a:
+    image: apache/rocketmq:4.9.3
+    container_name: rmqbroker-a
+    ports:
+      - '10911:10911'
+    volumes:
+      - ./logs/broker-a:/home/rocketmq/logs/rocketmqlogs
+      - ./store/broker-a:/home/rocketmq/store
+      - ./conf/broker-a.conf:/home/rocketmq/rocketmq-4.9.3/conf/broker.conf
+    environment:
+      TZ: Asia/Shanghai
+      NAMESRV_ADDR: "rmqnamesrv-a:9876"
+      JAVA_OPTS: " -Duser.home=/home"
+      JAVA_OPT_EXT: "-server -Xms128m -Xmx128m -Xmn128m"
+    command: sh mqbroker -c /home/rocketmq/rocketmq-4.9.3/conf/broker.conf autoCreateTopicEnable=true &
+    links:
+      - rmqnamesrv-a:rmqnamesrv-a
+      - rmqnamesrv-b:rmqnamesrv-b
+    networks:
+      rmq:
+        ipv4_address: 172.28.0.10
+        aliases:
+          - rmqbroker-a
+
+  rmqbroker-a-s:
+    image: apache/rocketmq:4.9.3
+    container_name: rmqbroker-a-s
+    ports:
+      - '10912:10911'
+    volumes:
+      - ./logs/broker-a-s:/home/rocketmq/logs/rocketmqlogs
+      - ./store/broker-a-s:/home/rocketmq/store
+      - ./conf/broker-a-s.conf:/home/rocketmq/rocketmq-4.9.3/conf/broker.conf
+    environment:
+      TZ: Asia/Shanghai
+      NAMESRV_ADDR: "rmqnamesrv-a:9876"
+      JAVA_OPTS: " -Duser.home=/home"
+      JAVA_OPT_EXT: "-server -Xms128m -Xmx128m -Xmn128m"
+    command: sh mqbroker -c /home/rocketmq/rocketmq-4.9.3/conf/broker.conf autoCreateTopicEnable=true &
+    links:
+      - rmqnamesrv-a:rmqnamesrv-a
+      - rmqnamesrv-b:rmqnamesrv-b
+    networks:
+      rmq:
+        ipv4_address: 172.28.0.11
+        aliases:
+          - rmqbroker-a-s
+
+  rmqbroker-b:
+    image: apache/rocketmq:4.9.3
+    container_name: rmqbroker-b
+    ports:
+      - '10913:10911'
+    volumes:
+      - ./logs/broker-b:/home/rocketmq/logs/rocketmqlogs
+      - ./store/broker-b:/home/rocketmq/store
+      - ./conf/broker-b.conf:/home/rocketmq/rocketmq-4.9.3/conf/broker.conf
+    environment:
+      TZ: Asia/Shanghai
+      NAMESRV_ADDR: "rmqnamesrv-a:9876"
+      JAVA_OPTS: " -Duser.home=/home"
+      JAVA_OPT_EXT: "-server -Xms128m -Xmx128m -Xmn128m"
+    command: sh mqbroker -c /home/rocketmq/rocketmq-4.9.3/conf/broker.conf autoCreateTopicEnable=true &
+    links:
+      - rmqnamesrv-a:rmqnamesrv-a
+      - rmqnamesrv-b:rmqnamesrv-b
+    networks:
+      rmq:
+        ipv4_address: 172.28.0.12
+        aliases:
+          - rmqbroker-b
+
+  rmqbroker-b-s:
+    image: apache/rocketmq:4.9.3
+    container_name: rmqbroker-b-s
+    ports:
+      - '10914:10911'
+    volumes:
+      - ./logs/broker-b-s:/home/rocketmq/logs/rocketmqlogs
+      - ./store/broker-b-s:/home/rocketmq/store
+      - ./conf/broker-b-s.conf:/home/rocketmq/rocketmq-4.9.3/conf/broker.conf
+    environment:
+      TZ: Asia/Shanghai
+      NAMESRV_ADDR: "rmqnamesrv-a:9876"
+      JAVA_OPTS: " -Duser.home=/home"
+      JAVA_OPT_EXT: "-server -Xms128m -Xmx128m -Xmn128m"
+    command: sh mqbroker -c /home/rocketmq/rocketmq-4.9.3/conf/broker.conf autoCreateTopicEnable=true &
+    links:
+      - rmqnamesrv-a:rmqnamesrv-a
+      - rmqnamesrv-b:rmqnamesrv-b
+    networks:
+      rmq:
+        ipv4_address: 172.28.0.13
+        aliases:
+          - rmqbroker-b-s
+
+  rmqconsole:
+    image: apacherocketmq/rocketmq-dashboard
+    container_name: rmqconsole
+    ports:
+      - '9093:8080'
+    volumes:
+      - ./logs/rmqconsole:/root/logs/consolelogs
+    environment:
+      JAVA_OPTS: -Drocketmq.namesrv.addr=rmqnamesrv-a:9876;rmqnamesrv-b:9877 -Dcom.rocketmq.sendMessageWithVIPChannel=false -Drocketmq.config.loginRequired=true
+    networks:
+      rmq:
+        ipv4_address: 172.28.0.14
+        aliases:
+          - rmqconsole
