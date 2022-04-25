@@ -2,5 +2,7 @@
 
 
 #### 介绍
-docker-compose 常用开发环境部署，支持单机和集群
+提供常用开发环境部署，支持单机和集群，包括MySQL、Nginx、xxl-job、Minio、Zookeeper、Redis，Spring-Boot-Admin
+
+
 
