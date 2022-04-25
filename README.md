@@ -9,13 +9,13 @@
 | Portainer                 | 1.24.2                        |
 | MySQL                     | 8.0.27                        |
 | Redis                     | 6.2.6                         |
-| Minio                     | RELEASE.2022-04-16T04-26-02Z  |
+| Minio                     | last version                  |
 | xxl-job-admin             | 2.3.0                         |
 | Nginx                     | 1.21.6                        |
 | Zookeeper                 | 3.6.3                         |
 | Spring-Boot-Admin         | 2.6.7                         |
 | RocketMQ                  | 4.9.3                         |
-| RocketMQ-Dashboard        | 1.0.0                        |
+| RocketMQ-Dashboard        | last version                  |
 
 #### 准备工作
 ```bash
