@@ -1,0 +1,68 @@
+version: '3'
+
+# 指定ip容器内部相互访问
+networks:
+  kafka:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.32.0.0/16
+
+services:
+  cluster-zookeeper-1:
+    privileged: true
+    image: zookeeper:3.6.3
+    container_name: cluster-zookeeper-1
+    restart: always
+    ports:
+      - '2190:2181'
+    volumes:
+      - ./zookeeper-1/data:/data
+      - ./zookeeper-1/datalogs:/datalogs
+      - ./zookeeper-1/logs:/logs
+    environment:
+      TZ: Asia/Shanghai
+      ZOO_MY_ID: 1
+      ZOO_SERVERS: server.1=cluster-zookeeper-1:2888:3888;2181 server.2=cluster-zookeeper-2:2888:3888;2181 server.3=cluster-zookeeper-3:2888:3888;2181
+    networks:
+      kafka:
+        ipv4_address: 172.32.0.15
+
+  cluster-zookeeper-2:
+    privileged: true
+    image: zookeeper:3.6.3
+    container_name: cluster-zookeeper-2
+    restart: always
+    ports:
+      - '2191:2181'
+    volumes:
+      - ./zookeeper-2/data:/data
+      - ./zookeeper-2/datalogs:/datalogs
+      - ./zookeeper-2/logs:/logs
+    environment:
+      TZ: Asia/Shanghai
+      ZOO_MY_ID: 2
+      ZOO_SERVERS: server.1=cluster-zookeeper-1:2888:3888;2181 server.2=cluster-zookeeper-2:2888:3888;2181 server.3=cluster-zookeeper-3:2888:3888;2181
+    networks:
+      kafka:
+        ipv4_address: 172.32.0.14
+
+  cluster-zookeeper-3:
+    privileged: true
+    image: zookeeper:3.6.3
+    container_name: cluster-zookeeper-3
+    restart: always
+    ports:
+      - '2192:2181'
+    volumes:
+      - ./zookeeper-3/data:/data
+      - ./zookeeper-3/datalogs:/datalogs
+      - ./zookeeper-3/logs:/logs
+    environment:
+      TZ: Asia/Shanghai
+      ZOO_MY_ID: 3
+      ZOO_SERVERS: server.1=cluster-zookeeper-1:2888:3888;2181 server.2=cluster-zookeeper-2:2888:3888;2181 server.3=cluster-zookeeper-3:2888:3888;2181
+    networks:
+      kafka:
+        ipv4_address: 172.32.0.13
+
