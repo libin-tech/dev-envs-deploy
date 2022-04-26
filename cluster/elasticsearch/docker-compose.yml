@@ -14,6 +14,7 @@ services:
     container_name: es-master
     privileged: true
     environment:
+      - TZ=Asia/Shanghai
       - cluster.name=elasticsearch-cluster
       - node.name=es-master
       - node.master=true
@@ -44,6 +45,7 @@ services:
     container_name: es-node1
     privileged: true
     environment:
+      - TZ=Asia/Shanghai
       - cluster.name=elasticsearch-cluster
       - node.name=es-node1
       - node.master=true
@@ -74,6 +76,7 @@ services:
     container_name: es-node2
     privileged: true
     environment:
+      - TZ=Asia/Shanghai
       - cluster.name=elasticsearch-cluster
       - node.name=es-node2
       - node.master=true
@@ -105,6 +108,8 @@ services:
     restart: always
     ports:
       - "9100:9100"
+    environment:
+      - TZ=Asia/Shanghai
     networks:
       es:
         ipv4_address: 172.29.0.11
@@ -115,6 +120,8 @@ services:
     restart: always
     ports:
       - "1358:1358"
+    environment:
+      - TZ=Asia/Shanghai
     networks:
       es:
         ipv4_address: 172.29.0.12
