@@ -9,6 +9,8 @@ usage() {
 # 启动所有容器
 start(){
     docker-compose up -d
+    docker restart mysql
+    docker restart xxl-job-admin
 }
 
 # 停止所有容器
