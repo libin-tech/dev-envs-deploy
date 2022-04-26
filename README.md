@@ -1,7 +1,7 @@
 # dev-envs-deploy [![Fork me on Gitee](https://gitee.com/islibin/dev-envs-deploy/widgets/widget_1.svg)](https://gitee.com/islibin/dev-envs-deploy)
 
-
 #### 介绍
+
 提供常用开发环境部署，支持单机和集群，包括以下常用中间件：
 
 | 中间件  | 版本 |
@@ -14,13 +14,17 @@
 | Nginx                     | 1.21.6                        |
 | Zookeeper                 | 3.6.3                         |
 | Spring-Boot-Admin         | 2.6.7                         |
-| RocketMQ                  | 4.9.3                         |
+| RocketMQ-cluster          | 4.9.3                         |
 | RocketMQ-Dashboard        | last version                  |
-| Elasticsearch             | 7.8.0                         |
+| Elasticsearch-cluster     | 7.8.0                         |
 | Elasticsearch-head        | last version                  |
 | Dejavu                    | last version                  |
+| Kafka-cluster             | 2.8.0                         |
+| Kafka-manager             | last version                  |
+| Zookeeper-cluster         | 3.6.3                         |
 
 #### 准备工作
+
 ```bash
 # 创建主目录
 mkdir docker
@@ -31,6 +35,7 @@ git clone https://gitee.com/islibin/dev-envs-deploy.git
 ```
 
 #### 部署
+
 ```bash
 # 安装portainer
 cd /docker/dev-envs-deploy/portainer
@@ -56,49 +61,77 @@ sh deploy.sh start
 #### 各中间价默认密码
 
 **Portainer**
+
 ```
 http://127.0.0.1:9999/
 ```
 
-**MySQL** 
+**MySQL**
+
 ```
 127.0.0.1:3306
 root/12345678
 ```
 
-**Redis** 
+**zookeeper**
+
+```
+127.0.0.1:2181
+
+```
+
+**Redis**
+
 ```
 127.0.0.1:6379
 12345678
 ```
 
 **Minio**
+
 ```
 http://127.0.0.1:9001/login
 minio/12345678
 ```
 
-**xxl-job-admin**  
+**xxl-job-admin**
+
 ```
 http://127.0.0.1:9091/xxl-job-admin/
 admin/123456
 ```
 
 **spring-boot-admin**
+
 ```
 http://127.0.0.1:9090/admin  
 admin/admin123456
 ```
 
-**RocketMQ-Dashboard** 
+**RocketMQ-Dashboard**
+
 ```
 http://127.0.0.1:9093/
 admin/admin
 ```
 
 **Elasticsearch-Dashboard**
+
 ```
 http://127.0.0.1:9100/
 http://127.0.0.1:1358/
 ```
 
+**Kafka-Manager**
+
+```
+http://127.0.0.1:9002/
+
+```
+
+**zookeeper-cluster**
+
+```
+127.0.0.1:2190~2192
+
+```
