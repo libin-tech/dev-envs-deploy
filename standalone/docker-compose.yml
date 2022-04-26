@@ -106,6 +106,10 @@ services:
       # 时区上海
       TZ: Asia/Shanghai
     privileged: true
+    volumes:
+      - ./zookeeper/data:/data
+      - ./zookeeper/datalogs:/datalogs
+      - ./zookeeper/logs:/logs
     ports:
       - '2181:2181'
     networks:
