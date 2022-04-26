@@ -16,6 +16,9 @@
 | Spring-Boot-Admin         | 2.6.7                         |
 | RocketMQ                  | 4.9.3                         |
 | RocketMQ-Dashboard        | last version                  |
+| Elasticsearch             | 7.8.0                         |
+| Elasticsearch-head        | last version                  |
+| Dejavu                    | last version                  |
 
 #### 准备工作
 ```bash
@@ -44,6 +47,9 @@ cd /docker/dev-envs-deploy/mq/rocketmq
 sh deploy.sh start
 # 安装扩展程序：spring-boot-admin 监控
 cd /docker/dev-envs-deploy/extend
+sh deploy.sh start
+# 安装扩展程序：elasticsearch集群及控制台
+cd /docker/dev-envs-deploy/elasticsearch
 sh deploy.sh start
 ```
 
@@ -88,5 +94,11 @@ admin/admin123456
 ```
 http://127.0.0.1:9093/
 admin/admin
+```
+
+**Elasticsearch-Dashboard**
+```
+http://127.0.0.1:9100/
+http://127.0.0.1:1358/
 ```
 

@@ -1,0 +1,120 @@
+version: '3'
+
+# 指定ip容器内部相互访问
+networks:
+  es:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.29.0.0/16
+
+services:
+  es-master:
+    image: elasticsearch:7.8.0
+    container_name: es-master
+    privileged: true
+    environment:
+      - cluster.name=elasticsearch-cluster
+      - node.name=es-master
+      - node.master=true
+      - node.data=true
+      - bootstrap.memory_lock=true
+      #- discovery.seed_hosts=es-node1,es-node2
+      - http.cors.enabled=true
+      - http.cors.allow-origin=*
+      - cluster.initial_master_nodes=es-master,es-node1,es-node2
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "discovery.zen.ping.unicast.hosts=es-master,es-node1,es-node2"
+      - "discovery.zen.minimum_master_nodes=2"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./master/data:/usr/share/elasticsearch/data
+      - ./master/logs:/usr/share/elasticsearch/logs
+    ports:
+      - '9200:9200'
+    networks:
+      es:
+        ipv4_address: 172.29.0.8
+
+  es-node1:
+    image: elasticsearch:7.8.0
+    container_name: es-node1
+    privileged: true
+    environment:
+      - cluster.name=elasticsearch-cluster
+      - node.name=es-node1
+      - node.master=true
+      - node.data=true
+      - bootstrap.memory_lock=true
+      #- discovery.seed_hosts=es-node1,es-node2
+      - http.cors.enabled=true
+      - http.cors.allow-origin=*
+      - cluster.initial_master_nodes=es-master,es-node1,es-node2
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "discovery.zen.ping.unicast.hosts=es-master,es-node1,es-node2"
+      - "discovery.zen.minimum_master_nodes=2"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./node1/data:/usr/share/elasticsearch/data
+      - ./node1/logs:/usr/share/elasticsearch/logs
+    ports:
+      - '9201:9200'
+    networks:
+      es:
+        ipv4_address: 172.29.0.9
+
+  es-node2:
+    image: elasticsearch:7.8.0
+    container_name: es-node2
+    privileged: true
+    environment:
+      - cluster.name=elasticsearch-cluster
+      - node.name=es-node2
+      - node.master=true
+      - node.data=true
+      - bootstrap.memory_lock=true
+      #- discovery.seed_hosts=es-node1,es-node2
+      - http.cors.enabled=true
+      - http.cors.allow-origin=*
+      - cluster.initial_master_nodes=es-master,es-node1,es-node2
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "discovery.zen.ping.unicast.hosts=es-master,es-node1,es-node2"
+      - "discovery.zen.minimum_master_nodes=2"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./node2/data:/usr/share/elasticsearch/data
+      - ./node2/logs:/usr/share/elasticsearch/logs
+    ports:
+      - '9202:9200'
+    networks:
+      es:
+        ipv4_address: 172.29.0.10
+
+  es-head:
+    image: tobias74/elasticsearch-head:6
+    container_name: es-head
+    restart: always
+    ports:
+      - "9100:9100"
+    networks:
+      es:
+        ipv4_address: 172.29.0.11
+
+  dejavu:
+    image: appbaseio/dejavu
+    container_name: dejavu
+    restart: always
+    ports:
+      - "1358:1358"
+    networks:
+      es:
+        ipv4_address: 172.29.0.12
