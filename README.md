@@ -36,6 +36,9 @@ git clone https://gitee.com/islibin/dev-envs-deploy.git
 
 #### 部署
 
+##### 构建私有jre环境
+链接: https://pan.baidu.com/s/1SGLmlrU6liy_qa1gC1u8VA  密码: awk5
+
 ```bash
 # 安装portainer
 cd /docker/dev-envs-deploy/portainer
@@ -58,7 +61,7 @@ cd /docker/dev-envs-deploy/elasticsearch
 sh deploy.sh start
 ```
 
-#### 各中间价默认密码
+#### 各中间件默认密码
 
 **Portainer**
 
