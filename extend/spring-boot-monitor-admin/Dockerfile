@@ -1,4 +1,4 @@
-FROM anapsix/alpine-java:8_server-jre_unlimited
+FROM libin/alpine-jre8
 
 MAINTAINER im_libin
 
