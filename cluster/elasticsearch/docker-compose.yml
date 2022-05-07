@@ -26,6 +26,7 @@ services:
       - cluster.initial_master_nodes=es-master,es-node1,es-node2
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - "discovery.zen.ping.unicast.hosts=es-master,es-node1,es-node2"
+      - "discovery.zen.ping_timeout=6"
       - "discovery.zen.minimum_master_nodes=2"
     ulimits:
       memlock:
@@ -57,6 +58,7 @@ services:
       - cluster.initial_master_nodes=es-master,es-node1,es-node2
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - "discovery.zen.ping.unicast.hosts=es-master,es-node1,es-node2"
+      - "discovery.zen.ping_timeout=6"
       - "discovery.zen.minimum_master_nodes=2"
     ulimits:
       memlock:
@@ -88,6 +90,7 @@ services:
       - cluster.initial_master_nodes=es-master,es-node1,es-node2
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - "discovery.zen.ping.unicast.hosts=es-master,es-node1,es-node2"
+      - "discovery.zen.ping_timeout=6"
       - "discovery.zen.minimum_master_nodes=2"
     ulimits:
       memlock:
