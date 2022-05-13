@@ -135,3 +135,19 @@ services:
     networks:
       my_net:
         ipv4_address: 172.30.0.92
+
+  # dubbo-admin
+  dubbo-admin:
+    image: apache/dubbo-admin
+    container_name: dubbo-admin
+    environment:
+      TZ: Asia/Shanghai
+      admin.registry.address: zookeeper://zookeeper:2181
+      admin.config-center: zookeeper://zookeeper:2181
+      admin.metadata-report.address: zookeeper://zookeeper:2181
+    privileged: true
+    ports:
+      - '8934:8080'
+    networks:
+      my_net:
+        ipv4_address: 172.30.0.9
