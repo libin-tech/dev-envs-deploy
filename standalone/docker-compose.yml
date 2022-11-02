@@ -10,6 +10,36 @@ networks:
 
 services:
   # --- MySQL
+  mysql-5.7:
+    platform: linux/x86_64
+    image: mysql:5.7
+    container_name: mysql-5.7
+    environment:
+      # 时区上海
+      TZ: Asia/Shanghai
+      # root 密码
+      MYSQL_ROOT_PASSWORD: 12345678
+      # 初始化数据库(后续的初始化sql会在这个库执行)
+      # MYSQL_DATABASE: test
+    ports:
+      - "3307:3307"
+    volumes:
+      # 数据挂载
+      - ./mysql-5.7/data/:/var/lib/mysql/
+      # 配置挂载
+      - ./mysql-5.7/conf/:/etc/mysql/conf.d/
+      # 日志
+      - ./mysql-5.7/logs/:/logs
+      # my.cnf
+      - ./mysql-5.7/my.cnf:/etc/mysql/my.cnf
+    privileged: true
+    restart: always
+    networks:
+      my_net:
+        ipv4_address: 172.30.0.33
+
+
+  # --- MySQL
   mysql:
     platform: linux/x86_64
     image: mysql:8.0.27
@@ -26,20 +56,16 @@ services:
     volumes:
       # 数据挂载
       - ./mysql/data/:/var/lib/mysql/
+      - ./mysql/mysql-files:/var/lib/mysql-files/
       # 配置挂载
       - ./mysql/conf/:/etc/mysql/conf.d/
       # 日志
       - ./mysql/logs/:/logs
       # 初始化脚本
       - ./mysql/source:/docker-entrypoint-initdb.d
+      # my.cnf
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
     command:
-      # 将mysql8.0默认密码策略 修改为 原先 策略 (mysql8.0对其默认策略做了更改 会导致密码无法匹配)
-      --default-authentication-plugin=mysql_native_password
-      --character-set-server=utf8mb4
-      --collation-server=utf8mb4_general_ci
-      --explicit_defaults_for_timestamp=true
-      --lower_case_table_names=1
-      --max_connections=2000
       --init-file /docker-entrypoint-initdb.d/tables_xxl_job.sql
     privileged: true
     restart: always
