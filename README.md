@@ -7,10 +7,12 @@
 | 中间件  | 版本 |
 | --- | --- |
 | Portainer                 | 1.24.2                        |
+| MySQL5.7                  | 5.7                           |
 | MySQL                     | 8.0.27                        |
 | Redis                     | 6.2.6                         |
 | Minio                     | last version                  |
 | xxl-job-admin             | 2.3.0                         |
+| dubbo-admin               | last version                  |
 | Nginx                     | 1.21.6                        |
 | Zookeeper                 | 3.6.3                         |
 | Spring-Boot-Admin         | 2.6.7                         |
