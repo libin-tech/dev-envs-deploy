@@ -126,15 +126,19 @@ INSERT INTO `xxl_job`.`xxl_job_lock` ( `lock_name`) VALUES ( 'schedule_lock');
 commit;
 
 #
-# nacos v2.2.0
+# nacos v2.1.0
 
 CREATE database if NOT EXISTS `nacos_dev` default character set utf8 collate utf8_bin;
 use `nacos_dev`;
 
+/******************************************/
+/*   数据库全名 = nacos_config   */
+/*   表名称 = config_info   */
+/******************************************/
 CREATE TABLE `nacos_dev`.`config_info` (
                                `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
                                `data_id` varchar(255) NOT NULL COMMENT 'data_id',
-                               `group_id` varchar(128) DEFAULT NULL,
+                               `group_id` varchar(255) DEFAULT NULL,
                                `content` longtext NOT NULL COMMENT 'content',
                                `md5` varchar(32) DEFAULT NULL COMMENT 'md5',
                                `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -153,11 +157,14 @@ CREATE TABLE `nacos_dev`.`config_info` (
                                UNIQUE KEY `uk_configinfo_datagrouptenant` (`data_id`,`group_id`,`tenant_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='config_info';
 
-
+/******************************************/
+/*   数据库全名 = nacos_config   */
+/*   表名称 = config_info_aggr   */
+/******************************************/
 CREATE TABLE `nacos_dev`.`config_info_aggr` (
                                     `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
                                     `data_id` varchar(255) NOT NULL COMMENT 'data_id',
-                                    `group_id` varchar(128) NOT NULL COMMENT 'group_id',
+                                    `group_id` varchar(255) NOT NULL COMMENT 'group_id',
                                     `datum_id` varchar(255) NOT NULL COMMENT 'datum_id',
                                     `content` longtext NOT NULL COMMENT '内容',
                                     `gmt_modified` datetime NOT NULL COMMENT '修改时间',
@@ -168,7 +175,10 @@ CREATE TABLE `nacos_dev`.`config_info_aggr` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='增加租户字段';
 
 
-
+/******************************************/
+/*   数据库全名 = nacos_config   */
+/*   表名称 = config_info_beta   */
+/******************************************/
 CREATE TABLE `nacos_dev`.`config_info_beta` (
                                     `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
                                     `data_id` varchar(255) NOT NULL COMMENT 'data_id',
@@ -187,7 +197,10 @@ CREATE TABLE `nacos_dev`.`config_info_beta` (
                                     UNIQUE KEY `uk_configinfobeta_datagrouptenant` (`data_id`,`group_id`,`tenant_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='config_info_beta';
 
-
+/******************************************/
+/*   数据库全名 = nacos_config   */
+/*   表名称 = config_info_tag   */
+/******************************************/
 CREATE TABLE `nacos_dev`.`config_info_tag` (
                                    `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
                                    `data_id` varchar(255) NOT NULL COMMENT 'data_id',
@@ -205,7 +218,10 @@ CREATE TABLE `nacos_dev`.`config_info_tag` (
                                    UNIQUE KEY `uk_configinfotag_datagrouptenanttag` (`data_id`,`group_id`,`tenant_id`,`tag_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='config_info_tag';
 
-
+/******************************************/
+/*   数据库全名 = nacos_config   */
+/*   表名称 = config_tags_relation   */
+/******************************************/
 CREATE TABLE `nacos_dev`.`config_tags_relation` (
                                         `id` bigint(20) NOT NULL COMMENT 'id',
                                         `tag_name` varchar(128) NOT NULL COMMENT 'tag_name',
@@ -219,7 +235,10 @@ CREATE TABLE `nacos_dev`.`config_tags_relation` (
                                         KEY `idx_tenant_id` (`tenant_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='config_tag_relation';
 
-
+/******************************************/
+/*   数据库全名 = nacos_config   */
+/*   表名称 = group_capacity   */
+/******************************************/
 CREATE TABLE `nacos_dev`.`group_capacity` (
                                   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
                                   `group_id` varchar(128) NOT NULL DEFAULT '' COMMENT 'Group ID，空字符表示整个集群',
@@ -235,9 +254,12 @@ CREATE TABLE `nacos_dev`.`group_capacity` (
                                   UNIQUE KEY `uk_group_id` (`group_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='集群、各Group容量信息表';
 
-
+/******************************************/
+/*   数据库全名 = nacos_config   */
+/*   表名称 = his_config_info   */
+/******************************************/
 CREATE TABLE `nacos_dev`.`his_config_info` (
-                                   `id` bigint(20) unsigned NOT NULL,
+                                   `id` bigint(64) unsigned NOT NULL,
                                    `nid` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
                                    `data_id` varchar(255) NOT NULL,
                                    `group_id` varchar(128) NOT NULL,
@@ -258,7 +280,10 @@ CREATE TABLE `nacos_dev`.`his_config_info` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='多租户改造';
 
 
-
+/******************************************/
+/*   数据库全名 = nacos_config   */
+/*   表名称 = tenant_capacity   */
+/******************************************/
 CREATE TABLE `nacos_dev`.`tenant_capacity` (
                                    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
                                    `tenant_id` varchar(128) NOT NULL DEFAULT '' COMMENT 'Tenant ID',
@@ -308,8 +333,8 @@ CREATE TABLE `nacos_dev`.`permissions` (
                                UNIQUE INDEX `uk_role_permission` (`role`,`resource`,`action`) USING BTREE
 );
 
-INSERT INTO `nacos_dev`.`users` (username, password, enabled) VALUES ('nacos', '$2a$10$EuWPZHzz32dJN7jexM34MOeYirDdFAZm2kuWj7VEOJhhZkDrxfvUu', TRUE);
+INSERT INTO `nacos_dev`.`users` (username, password, enabled) VALUES ('nacos', '$2a$10$OrRZkRC28Iv.NH6uAd.WjOVRTXmp4ubLQHnWJ01.Kaj6EdxSxuBsS', TRUE);
 
-INSERT INTO `nacos_dev`.`users` (username, role) VALUES ('nacos', 'ROLE_ADMIN');
+INSERT INTO `nacos_dev`.`roles` (username, role) VALUES ('nacos', 'ROLE_ADMIN');
 
 commit;

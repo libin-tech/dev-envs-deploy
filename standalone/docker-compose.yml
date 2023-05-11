@@ -178,10 +178,12 @@ services:
 
   # nacos-server
   nacos-server:
-    image: nacos/nacos-server:v2.2.0
+    platform: linux/x86_64
+    image: nacos/nacos-server:v2.1.0
     container_name: nacos-server
     restart: always
     environment:
+      TZ: Asia/Shanghai
       PREFER_HOST_MODE: ip
       MODE: standalone
       SPRING_DATASOURCE_PLATFORM: mysql
@@ -197,9 +199,9 @@ services:
     volumes:
       - ./nacos/logs/:/home/nacos/logs
     ports:
-      - "8488:8848"
-      - "8489:9848"
-      - "5559:9555"
+      - "7737:8848"
+      - "8737:9848"
+      - "8738:9849"
     networks:
       my_net:
         ipv4_address: 172.30.0.19
