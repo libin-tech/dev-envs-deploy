@@ -176,7 +176,9 @@ services:
       my_net:
         ipv4_address: 172.30.0.9
 
-  # nacos-server
+  # nacos-server:
+  # Nacos2.0版本相比1.X新增了gRPC的通信方式，因此需要增加2个端口。新增端口是在配置的主端口(server.port)基础上，进行一定偏移量自动生成，所以开放的端口如果改动必须按照规定改动，否则会出现连接失败的问题
+  # 链接：
   nacos-server:
     platform: linux/x86_64
     image: nacos/nacos-server:v2.1.0
@@ -199,9 +201,9 @@ services:
     volumes:
       - ./nacos/logs/:/home/nacos/logs
     ports:
-      - "7737:8848"
-      - "8737:9848"
-      - "8738:9849"
+      - "8488:8848"
+      - "9488:9848"
+      - "9489:9849"
     networks:
       my_net:
         ipv4_address: 172.30.0.19

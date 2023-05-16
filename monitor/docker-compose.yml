@@ -80,10 +80,46 @@ services:
     hostname: mysql_exporter
     restart: always
     environment:
-      DATA_SOURCE_NAME: root:12345678@(172.30.0.36:3306)
+      DATA_SOURCE_NAME: root:L0rfBGXhvrt9f7L8@(172.30.0.36:3306)
     ports:
       - "9104:9104"
     networks:
       monitor:
         ipv4_address: 172.11.0.7
 
+  # https://hertzbeat.com/zh-cn/docs/start/docker-deploy
+  # HertzBeat的历史数据存储依赖时序数据库 IoTDB
+  hertzbeat:
+    image: tancloud/hertzbeat
+    container_name: hertzbeat
+    hostname: hertzbeat
+    restart: always
+    environment:
+      # 时区上海
+      TZ: Asia/Shanghai
+      LANG: zh_CN.UTF-8
+    volumes:
+      - ./hertzbeat/data:/opt/hertzbeat/data
+      - ./hertzbeat/logs:/opt/hertzbeat/logs
+      - ./hertzbeat/config/application.yml:/opt/hertzbeat/config/application.yml
+      - ./hertzbeat/config/sureness.yml:/opt/hertzbeat/config/sureness.yml
+    ports:
+      - "7511:1157"
+    networks:
+      monitor:
+        ipv4_address: 172.11.0.8
+
+  iotdb:
+    image: apache/iotdb:0.13.3-node
+    container_name: iotdb
+    hostname: iotdb
+    restart: always
+    volumes:
+      - ./iotdb/data:/iotdb/data
+    ports:
+      - "7666:6667"
+      - "20888:31999"
+      - "9281:8181"
+    networks:
+      monitor:
+        ipv4_address: 172.11.0.9
