@@ -70,7 +70,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: L0rfBGXhvrt9f7L8
-    url: jdbc:mysql://172.30.0.36:3306/hertzbeat?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://101.43.235.100:6033/hertzbeat?useUnicode=true&characterEncoding=utf-8&useSSL=false
     hikari:
       max-lifetime: 120000
 
@@ -137,13 +137,13 @@ warehouse:
     # store real-time metrics data, enable only one below
     # 存储实时数据方式, 下方只能enabled启用一种方式
     memory:
-      enabled: true
+      enabled: false
       init-size: 1024
     redis:
-      enabled: false
-      host: 127.0.0.1
-      port: 6379
-      password: 123456
+      enabled: true
+      host: 101.43.235.100
+      port: 9736
+      password: L0rfBGXhvrt9f7L8
 
 alerter:
   # custom console url
