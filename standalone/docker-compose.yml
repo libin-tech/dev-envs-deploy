@@ -207,3 +207,37 @@ services:
     networks:
       my_net:
         ipv4_address: 172.30.0.19
+
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    restart: always
+    ports:
+      - "28018:27017"
+    volumes:
+      - ./mongodb/data/configdb:/data/configdb
+      - ./mongodb/database:/data/db
+    environment:
+      # 时区上海
+      TZ: Asia/Shanghai
+      MONGO_INITDB_ROOT_USERNAME: mongodb_admin
+      MONGO_INITDB_ROOT_PASSWORD: L0rfBGXhvrt9f7L8
+    command: [--auth]
+    networks:
+      my_net:
+        ipv4_address: 172.30.0.20
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    restart: always
+    ports:
+      - "8121:8081"
+    environment:
+      TZ: Asia/Shanghai
+      ME_CONFIG_MONGODB_ADMINUSERNAME: mongodb_admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: L0rfBGXhvrt9f7L8
+      ME_CONFIG_MONGODB_SERVER: mongodb
+    networks:
+      my_net:
+        ipv4_address: 172.30.0.21
