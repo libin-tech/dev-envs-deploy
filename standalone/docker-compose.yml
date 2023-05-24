@@ -267,3 +267,6 @@ services:
       - "10010:10010"
     volumes:
       - ./powerjob-data/powerjob-server:/root/powerjob/server/
+    networks:
+      my_net:
+        ipv4_address: 172.30.0.22
