@@ -2,7 +2,7 @@ version: '3'
 
 # 指定ip容器内部相互访问
 networks:
-  my_net:
+  standalone_my_net:
     external: true
 
 services:
@@ -23,7 +23,7 @@ services:
       ZOO_MY_ID: 1
       ZOO_SERVERS: server.1=cluster-zookeeper-1:2888:3888;2181 server.2=cluster-zookeeper-2:2888:3888;2181 server.3=cluster-zookeeper-3:2888:3888;2181
     networks:
-      my_net:
+      standalone_my_net:
         ipv4_address: 172.30.0.81
 
   cluster-zookeeper-2:
@@ -43,7 +43,7 @@ services:
       ZOO_MY_ID: 2
       ZOO_SERVERS: server.1=cluster-zookeeper-1:2888:3888;2181 server.2=cluster-zookeeper-2:2888:3888;2181 server.3=cluster-zookeeper-3:2888:3888;2181
     networks:
-      my_net:
+      standalone_my_net:
         ipv4_address: 172.30.0.82
 
   cluster-zookeeper-3:
@@ -63,6 +63,6 @@ services:
       ZOO_MY_ID: 3
       ZOO_SERVERS: server.1=cluster-zookeeper-1:2888:3888;2181 server.2=cluster-zookeeper-2:2888:3888;2181 server.3=cluster-zookeeper-3:2888:3888;2181
     networks:
-      my_net:
+      standalone_my_net:
         ipv4_address: 172.30.0.83
 

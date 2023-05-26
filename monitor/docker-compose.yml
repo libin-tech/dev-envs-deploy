@@ -1,7 +1,7 @@
 version: '3'
 
 networks:
-  my_net:
+  standalone_my_net:
     external: true
 
 services:
@@ -13,7 +13,7 @@ services:
     ports:
       - "9100:9100"
     networks:
-      my_net:
+      standalone_my_net:
         ipv4_address: 172.30.0.31
 
   cadvisor:
@@ -29,7 +29,7 @@ services:
     ports:
       - "8088:8080"
     networks:
-      my_net:
+      standalone_my_net:
         ipv4_address: 172.30.0.32
 
 
@@ -44,7 +44,7 @@ services:
     ports:
       - "9090:9090"
     networks:
-      my_net:
+      standalone_my_net:
         ipv4_address: 172.30.0.33
 
   grafana:
@@ -55,7 +55,7 @@ services:
     ports:
       - "3000:3000"
     networks:
-      my_net:
+      standalone_my_net:
         ipv4_address: 172.30.0.34
 
   redis-exporter:
@@ -68,7 +68,7 @@ services:
     command:
       - '--redis.addr=redis://172.30.0.12:6379'
     networks:
-      my_net:
+      standalone_my_net:
         ipv4_address: 172.30.0.35
 
 
@@ -82,7 +82,7 @@ services:
     ports:
       - "9104:9104"
     networks:
-      my_net:
+      standalone_my_net:
         ipv4_address: 172.30.0.36
 
   # https://hertzbeat.com/zh-cn/docs/start/docker-deploy
@@ -104,7 +104,7 @@ services:
     ports:
       - "7511:1157"
     networks:
-      my_net:
+      standalone_my_net:
         ipv4_address: 172.30.0.37
 
   iotdb:
@@ -119,5 +119,5 @@ services:
       - "20888:31999"
       - "9281:8181"
     networks:
-      my_net:
+      standalone_my_net:
         ipv4_address: 172.30.0.38

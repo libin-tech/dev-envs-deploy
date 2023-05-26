@@ -2,7 +2,7 @@ version: '3'
 
 # 指定ip容器内部相互访问
 networks:
-  my_net:
+  standalone_my_net:
     external: true
 
 services:
@@ -39,7 +39,7 @@ services:
       - "9848:9848"
       - "9849:9849"
     networks:
-      my_net:
+      standalone_my_net:
         ipv4_address: 172.30.0.61
 
   nacos-server-b:
@@ -72,7 +72,7 @@ services:
       - "9858:9848"
       - "9859:9849"
     networks:
-      nacos:
+      standalone_my_net:
         ipv4_address: 172.30.0.62
 
   nacos-server-c:
@@ -105,5 +105,5 @@ services:
       - "9868:9848"
       - "9870:9849"
     networks:
-      nacos:
+      standalone_my_net:
         ipv4_address: 172.30.0.63

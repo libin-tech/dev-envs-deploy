@@ -2,7 +2,7 @@ version: '3'
 
 # 指定ip容器内部相互访问
 networks:
-  my_net:
+  standalone_my_net:
     external: true
 
 services:
@@ -35,7 +35,7 @@ services:
     ports:
       - '9200:9200'
     networks:
-      my_net:
+      standalone_my_net:
         ipv4_address: 172.30.0.41
 
   es-node1:
@@ -67,7 +67,7 @@ services:
     ports:
       - '9201:9200'
     networks:
-      my_net:
+      standalone_my_net:
         ipv4_address: 172.30.0.42
 
   es-node2:
@@ -99,7 +99,7 @@ services:
     ports:
       - '9202:9200'
     networks:
-      my_net:
+      standalone_my_net:
         ipv4_address: 172.30.0.43
 
   es-head:
@@ -111,7 +111,7 @@ services:
     environment:
       - TZ=Asia/Shanghai
     networks:
-      my_net:
+      standalone_my_net:
         ipv4_address: 172.30.0.44
 
   dejavu:
@@ -123,5 +123,5 @@ services:
     environment:
       - TZ=Asia/Shanghai
     networks:
-      my_net:
+      standalone_my_net:
         ipv4_address: 172.30.0.45

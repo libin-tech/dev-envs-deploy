@@ -2,7 +2,7 @@ version: '3'
 
 # 指定ip容器内部相互访问
 networks:
-  my_net:
+  standalone_my_net:
     external: true
 
 services:
@@ -16,7 +16,7 @@ services:
       - ./store/nameserver-a:/home/rocketmq/store
     command: sh mqnamesrv
     networks:
-      my_net:
+      standalone_my_net:
         ipv4_address: 172.30.0.71
         aliases:
           - rmqnamesrv-a
@@ -31,7 +31,7 @@ services:
       - ./store/nameserver-b:/home/rocketmq/store
     command: sh mqnamesrv
     networks:
-      my_net:
+      standalone_my_net:
         ipv4_address: 172.30.0.72
         aliases:
           - rmqnamesrv-b
@@ -55,7 +55,7 @@ services:
       - rmqnamesrv-a:rmqnamesrv-a
       - rmqnamesrv-b:rmqnamesrv-b
     networks:
-      my_net:
+      standalone_my_net:
         ipv4_address: 172.30.0.73
         aliases:
           - rmqbroker-a
@@ -79,7 +79,7 @@ services:
       - rmqnamesrv-a:rmqnamesrv-a
       - rmqnamesrv-b:rmqnamesrv-b
     networks:
-      my_net:
+      standalone_my_net:
         ipv4_address: 172.30.0.74
         aliases:
           - rmqbroker-a-s
@@ -103,7 +103,7 @@ services:
       - rmqnamesrv-a:rmqnamesrv-a
       - rmqnamesrv-b:rmqnamesrv-b
     networks:
-      my_net:
+      standalone_my_net:
         ipv4_address: 172.30.0.75
         aliases:
           - rmqbroker-b
@@ -127,7 +127,7 @@ services:
       - rmqnamesrv-a:rmqnamesrv-a
       - rmqnamesrv-b:rmqnamesrv-b
     networks:
-      my_net:
+      standalone_my_net:
         ipv4_address: 172.30.0.76
         aliases:
           - rmqbroker-b-s
@@ -142,7 +142,7 @@ services:
     environment:
       JAVA_OPTS: -Drocketmq.namesrv.addr=rmqnamesrv-a:9876;rmqnamesrv-b:9877 -Dcom.rocketmq.sendMessageWithVIPChannel=false -Drocketmq.config.loginRequired=true
     networks:
-      my_net:
+      standalone_my_net:
         ipv4_address: 172.30.0.77
         aliases:
           - rmqconsole
