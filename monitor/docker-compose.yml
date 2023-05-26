@@ -1,11 +1,8 @@
 version: '3'
 
 networks:
-  monitor:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.11.0.0/16
+  my_net:
+    external: true
 
 services:
   node-exporter:
@@ -16,8 +13,8 @@ services:
     ports:
       - "9100:9100"
     networks:
-      monitor:
-        ipv4_address: 172.11.0.2
+      my_net:
+        ipv4_address: 172.30.0.31
 
   cadvisor:
     image: google/cadvisor:latest
@@ -32,8 +29,8 @@ services:
     ports:
       - "8088:8080"
     networks:
-      monitor:
-        ipv4_address: 172.11.0.3
+      my_net:
+        ipv4_address: 172.30.0.32
 
 
   prometheus:
@@ -47,8 +44,8 @@ services:
     ports:
       - "9090:9090"
     networks:
-      monitor:
-        ipv4_address: 172.11.0.4
+      my_net:
+        ipv4_address: 172.30.0.33
 
   grafana:
     image: grafana/grafana
@@ -58,8 +55,8 @@ services:
     ports:
       - "3000:3000"
     networks:
-      monitor:
-        ipv4_address: 172.11.0.5
+      my_net:
+        ipv4_address: 172.30.0.34
 
   redis-exporter:
     image: oliver006/redis_exporter
@@ -68,11 +65,12 @@ services:
     restart: always
     ports:
       - "9121:9121"
-    networks:
-      monitor:
-        ipv4_address: 172.11.0.6
     command:
-      - '--redis.addr=redis://172.30.0.48:6379'
+      - '--redis.addr=redis://172.30.0.12:6379'
+    networks:
+      my_net:
+        ipv4_address: 172.30.0.35
+
 
   mysql-exporter:
     image: prom/mysqld-exporter
@@ -80,12 +78,12 @@ services:
     hostname: mysql_exporter
     restart: always
     environment:
-      DATA_SOURCE_NAME: root:L0rfBGXhvrt9f7L8@(172.30.0.36:3306)
+      DATA_SOURCE_NAME: root:L0rfBGXhvrt9f7L8@(172.30.0.11:3306)
     ports:
       - "9104:9104"
     networks:
-      monitor:
-        ipv4_address: 172.11.0.7
+      my_net:
+        ipv4_address: 172.30.0.36
 
   # https://hertzbeat.com/zh-cn/docs/start/docker-deploy
   # HertzBeat的历史数据存储依赖时序数据库 IoTDB
@@ -106,8 +104,8 @@ services:
     ports:
       - "7511:1157"
     networks:
-      monitor:
-        ipv4_address: 172.11.0.8
+      my_net:
+        ipv4_address: 172.30.0.37
 
   iotdb:
     image: apache/iotdb:0.13.3-node
@@ -121,5 +119,5 @@ services:
       - "20888:31999"
       - "9281:8181"
     networks:
-      monitor:
-        ipv4_address: 172.11.0.9
+      my_net:
+        ipv4_address: 172.30.0.38

@@ -2,11 +2,8 @@ version: '3'
 
 # 指定ip容器内部相互访问
 networks:
-  rmq:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.28.0.0/16
+  my_net:
+    external: true
 
 services:
   rmqnamesrv-a:
@@ -19,8 +16,8 @@ services:
       - ./store/nameserver-a:/home/rocketmq/store
     command: sh mqnamesrv
     networks:
-      rmq:
-        ipv4_address: 172.28.0.8
+      my_net:
+        ipv4_address: 172.30.0.71
         aliases:
           - rmqnamesrv-a
 
@@ -34,8 +31,8 @@ services:
       - ./store/nameserver-b:/home/rocketmq/store
     command: sh mqnamesrv
     networks:
-      rmq:
-        ipv4_address: 172.28.0.9
+      my_net:
+        ipv4_address: 172.30.0.72
         aliases:
           - rmqnamesrv-b
 
@@ -58,8 +55,8 @@ services:
       - rmqnamesrv-a:rmqnamesrv-a
       - rmqnamesrv-b:rmqnamesrv-b
     networks:
-      rmq:
-        ipv4_address: 172.28.0.10
+      my_net:
+        ipv4_address: 172.30.0.73
         aliases:
           - rmqbroker-a
 
@@ -82,8 +79,8 @@ services:
       - rmqnamesrv-a:rmqnamesrv-a
       - rmqnamesrv-b:rmqnamesrv-b
     networks:
-      rmq:
-        ipv4_address: 172.28.0.11
+      my_net:
+        ipv4_address: 172.30.0.74
         aliases:
           - rmqbroker-a-s
 
@@ -106,8 +103,8 @@ services:
       - rmqnamesrv-a:rmqnamesrv-a
       - rmqnamesrv-b:rmqnamesrv-b
     networks:
-      rmq:
-        ipv4_address: 172.28.0.12
+      my_net:
+        ipv4_address: 172.30.0.75
         aliases:
           - rmqbroker-b
 
@@ -130,8 +127,8 @@ services:
       - rmqnamesrv-a:rmqnamesrv-a
       - rmqnamesrv-b:rmqnamesrv-b
     networks:
-      rmq:
-        ipv4_address: 172.28.0.13
+      my_net:
+        ipv4_address: 172.30.0.76
         aliases:
           - rmqbroker-b-s
 
@@ -145,7 +142,7 @@ services:
     environment:
       JAVA_OPTS: -Drocketmq.namesrv.addr=rmqnamesrv-a:9876;rmqnamesrv-b:9877 -Dcom.rocketmq.sendMessageWithVIPChannel=false -Drocketmq.config.loginRequired=true
     networks:
-      rmq:
-        ipv4_address: 172.28.0.14
+      my_net:
+        ipv4_address: 172.30.0.77
         aliases:
           - rmqconsole

@@ -147,7 +147,7 @@ services:
       JAVA_OPTS: '-Xmx512m'
       # 参数
       PARAMS: '
-      --spring.datasource.url=jdbc:mysql://172.30.0.10:3306/xxl_job?Unicode=true&characterEncoding=UTF-8 
+      --spring.datasource.url=jdbc:mysql://172.30.0.11:3306/xxl_job?Unicode=true&characterEncoding=UTF-8 
       --spring.datasource.username=root 
       --spring.datasource.password=L0rfBGXhvrt9f7L8
       --xxl.job.accessToken=WVdSdGFXNDZUREJ5WmtKSFdHaDJjblE1WmpkTU9BPT0=
@@ -192,14 +192,16 @@ services:
       MODE: standalone
       SPRING_DATASOURCE_PLATFORM: mysql
       # mysql信息配置
-      MYSQL_SERVICE_HOST: mysql
+      MYSQL_SERVICE_HOST: 172.30.0.11
       MYSQL_SERVICE_DB_NAME: nacos
       MYSQL_SERVICE_PORT: 3306
       MYSQL_SERVICE_USER: root
       MYSQL_SERVICE_PASSWORD: L0rfBGXhvrt9f7L8
       MYSQL_SERVICE_DB_PARAM: characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+      # JVM参数
       JVM_XMS: 128m
-      JVM_MMS: 128m
+      JVM_XMX: 128m
+      JVM_XMN: 128m
     volumes:
       - ./nacos/logs/:/home/nacos/logs
     ports:
@@ -253,7 +255,7 @@ services:
       JVMOPTIONS: "-Xmx256m"
       PARAMS: "
       --oms.mongodb.enable=false 
-      --spring.datasource.core.jdbc-url=jdbc:mysql://172.30.0.10:3306/powerjob_daily?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+      --spring.datasource.core.jdbc-url=jdbc:mysql://172.30.0.11:3306/powerjob_daily?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
       --spring.datasource.core.username=root
       --spring.datasource.core.password=L0rfBGXhvrt9f7L8
       "

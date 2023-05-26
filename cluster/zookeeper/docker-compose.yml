@@ -2,11 +2,8 @@ version: '3'
 
 # 指定ip容器内部相互访问
 networks:
-  zk:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.32.0.0/16
+  my_net:
+    external: true
 
 services:
   cluster-zookeeper-1:
@@ -26,8 +23,8 @@ services:
       ZOO_MY_ID: 1
       ZOO_SERVERS: server.1=cluster-zookeeper-1:2888:3888;2181 server.2=cluster-zookeeper-2:2888:3888;2181 server.3=cluster-zookeeper-3:2888:3888;2181
     networks:
-      zk:
-        ipv4_address: 172.32.0.15
+      my_net:
+        ipv4_address: 172.30.0.81
 
   cluster-zookeeper-2:
     privileged: true
@@ -46,8 +43,8 @@ services:
       ZOO_MY_ID: 2
       ZOO_SERVERS: server.1=cluster-zookeeper-1:2888:3888;2181 server.2=cluster-zookeeper-2:2888:3888;2181 server.3=cluster-zookeeper-3:2888:3888;2181
     networks:
-      zk:
-        ipv4_address: 172.32.0.14
+      my_net:
+        ipv4_address: 172.30.0.82
 
   cluster-zookeeper-3:
     privileged: true
@@ -66,6 +63,6 @@ services:
       ZOO_MY_ID: 3
       ZOO_SERVERS: server.1=cluster-zookeeper-1:2888:3888;2181 server.2=cluster-zookeeper-2:2888:3888;2181 server.3=cluster-zookeeper-3:2888:3888;2181
     networks:
-      zk:
-        ipv4_address: 172.32.0.13
+      my_net:
+        ipv4_address: 172.30.0.83
 
