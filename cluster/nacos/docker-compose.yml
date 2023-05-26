@@ -12,26 +12,9 @@ services:
   nacos-server-a:
     image: nacos/nacos-server
     container_name: nacos-server-a
-    restart: always
-    external_links: # 连接本compose文件以外的container
-      - mysql
-    environment:
-      TZ: Asia/Shanghai
-      PREFER_HOST_MODE: ip
-      MODE: cluster
-      NACOS_SERVERS: nacos-server-a:8848 nacos-server-b:8848 nacos-server-c:8848
-      SPRING_DATASOURCE_PLATFORM: mysql
-      # mysql信息配置
-      MYSQL_SERVICE_HOST: mysql
-      MYSQL_SERVICE_DB_NAME: nacos
-      MYSQL_SERVICE_PORT: 3306
-      MYSQL_SERVICE_USER: root
-      MYSQL_SERVICE_PASSWORD: L0rfBGXhvrt9f7L8
-      MYSQL_SERVICE_DB_PARAM: characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
-      # JVM参数
-      JVM_XMS: 128m
-      JVM_XMX: 128m
-      JVM_XMN: 128m
+    restart: on-failure
+    env_file:
+      - ./env/nacos-ip.env
     volumes:
       - ./nacos-server-a/logs/:/home/nacos/logs
     ports:
@@ -45,26 +28,9 @@ services:
   nacos-server-b:
     image: nacos/nacos-server
     container_name: nacos-server-b
-    restart: always
-    external_links: # 连接本compose文件以外的container
-      - mysql
-    environment:
-      TZ: Asia/Shanghai
-      PREFER_HOST_MODE: ip
-      MODE: cluster
-      NACOS_SERVERS: nacos-server-a:8848 nacos-server-b:8848 nacos-server-c:8848
-      SPRING_DATASOURCE_PLATFORM: mysql
-      # mysql信息配置
-      MYSQL_SERVICE_HOST: mysql
-      MYSQL_SERVICE_DB_NAME: nacos
-      MYSQL_SERVICE_PORT: 3306
-      MYSQL_SERVICE_USER: root
-      MYSQL_SERVICE_PASSWORD: L0rfBGXhvrt9f7L8
-      MYSQL_SERVICE_DB_PARAM: characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
-      # JVM参数
-      JVM_XMS: 128m
-      JVM_XMX: 128m
-      JVM_XMN: 128m
+    restart: on-failure
+    env_file:
+      - ./env/nacos-ip.env
     volumes:
       - ./nacos-server-b/logs/:/home/nacos/logs
     ports:
@@ -78,32 +44,15 @@ services:
   nacos-server-c:
     image: nacos/nacos-server
     container_name: nacos-server-c
-    restart: always
-    external_links: # 连接本compose文件以外的container
-      - mysql
-    environment:
-      TZ: Asia/Shanghai
-      PREFER_HOST_MODE: ip
-      MODE: cluster
-      NACOS_SERVERS: nacos-server-a:8848 nacos-server-b:8848 nacos-server-c:8848
-      SPRING_DATASOURCE_PLATFORM: mysql
-      # mysql信息配置
-      MYSQL_SERVICE_HOST: mysql
-      MYSQL_SERVICE_DB_NAME: nacos
-      MYSQL_SERVICE_PORT: 3306
-      MYSQL_SERVICE_USER: root
-      MYSQL_SERVICE_PASSWORD: L0rfBGXhvrt9f7L8
-      MYSQL_SERVICE_DB_PARAM: characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
-      # JVM参数
-      JVM_XMS: 128m
-      JVM_XMX: 128m
-      JVM_XMN: 128m
+    restart: on-failure
+    env_file:
+      - ./env/nacos-ip.env
     volumes:
       - ./nacos-server-c/logs/:/home/nacos/logs
     ports:
       - "8868:8848"
       - "9868:9848"
-      - "9870:9849"
+      - "9869:9849"
     networks:
       standalone_my_net:
         ipv4_address: 172.30.0.63
