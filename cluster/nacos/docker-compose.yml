@@ -16,7 +16,7 @@ services:
     env_file:
       - ./env/nacos-ip.env
     volumes:
-      - ./nacos-server-a/logs/:/home/nacos/logs
+      - ./logs/nacos-server-a/:/home/nacos/logs
     ports:
       - "8848:8848"
       - "9848:9848"
@@ -32,7 +32,7 @@ services:
     env_file:
       - ./env/nacos-ip.env
     volumes:
-      - ./nacos-server-b/logs/:/home/nacos/logs
+      - ./logs/nacos-server-b/:/home/nacos/logs
     ports:
       - "8858:8848"
       - "9858:9848"
@@ -48,7 +48,7 @@ services:
     env_file:
       - ./env/nacos-ip.env
     volumes:
-      - ./nacos-server-c/logs/:/home/nacos/logs
+      - ./logs/nacos-server-c/:/home/nacos/logs
     ports:
       - "8868:8848"
       - "9868:9848"
