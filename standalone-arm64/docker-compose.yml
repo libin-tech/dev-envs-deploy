@@ -1,0 +1,144 @@
+version: '3'
+
+# 指定ip容器内部相互访问
+networks:
+  my_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+services:
+  # --- MySQL
+  mysql:
+    image: mysql/mysql-server:latest
+    container_name: mysql
+    environment:
+      # 时区上海
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: L0rfBGXhvrt9f7L8
+    ports:
+      - "3306:3306"
+    volumes:
+      # 数据挂载
+      - ./mysql/data/:/var/lib/mysql/
+      - ./mysql/mysql-files:/var/lib/mysql-files/
+      # 配置挂载
+      - ./mysql/conf/:/etc/mysql/conf.d/
+      # 日志
+      - ./mysql/logs/:/logs
+      # 初始化脚本
+      - ./mysql/source:/docker-entrypoint-initdb.d
+      # my.cnf
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
+    command:
+      --init-file /docker-entrypoint-initdb.d/init.sql
+    privileged: true
+    restart: always
+    networks:
+      my_net:
+        ipv4_address: 172.20.0.20
+
+  # ---- Redis
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    environment:
+      # 时区上海
+      TZ: Asia/Shanghai
+    volumes:
+      # 配置文件
+      - ./redis/conf/redis.conf:/redis/config/redis.conf
+      # 数据文件
+      - ./redis/data/:/redis/data
+    command: "redis-server /redis/config/redis.conf"
+    privileged: true
+    restart: always
+    networks:
+      my_net:
+        ipv4_address: 172.20.0.21
+
+  # --- MINIO
+  minio:
+    image: minio/minio
+    container_name: minio
+    ports:
+      # api 端口
+      - "9000:9000"
+      # 控制台端口
+      - "9001:9001"
+    environment:
+      # 时区上海
+      TZ: Asia/Shanghai
+      # 管理后台用户名
+      MINIO_ACCESS_KEY: minio
+      # 管理后台密码，最小8个字符
+      MINIO_SECRET_KEY: 'L0rfBGXhvrt9f7L8'
+      # https需要指定域名
+      MINIO_SERVER_URL: ""
+    volumes:
+      # 映射当前目录下的data目录至容器内/data目录
+      - ./minio/data:/data
+      # 映射配置目录
+      - ./minio/config:/root/.minio/
+    command: server --address ':9000' --console-address ':9001' /data  # 指定容器中的目录 /data
+    privileged: true
+    restart: always
+    networks:
+      my_net:
+        ipv4_address: 172.20.0.22
+
+  # nacos-server:
+  # Nacos2.0版本相比1.X新增了gRPC的通信方式，因此需要增加2个端口。新增端口是在配置的主端口(server.port)基础上，进行一定偏移量自动生成，所以开放的端口如果改动必须按照规定改动，否则会出现连接失败的问题
+  # 链接：
+  nacos-server:
+    image: nacos/nacos-server:v2.1.0
+    container_name: nacos-server
+    restart: always
+    environment:
+      TZ: Asia/Shanghai
+      PREFER_HOST_MODE: ip
+      MODE: standalone
+      SPRING_DATASOURCE_PLATFORM: mysql
+      # mysql信息配置
+      MYSQL_SERVICE_HOST: mysql
+      MYSQL_SERVICE_DB_NAME: nacos_dev
+      MYSQL_SERVICE_PORT: 3306
+      MYSQL_SERVICE_USER: root
+      MYSQL_SERVICE_PASSWORD: L0rfBGXhvrt9f7L8
+      MYSQL_SERVICE_DB_PARAM: characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+      JVM_XMS: 128m
+      JVM_MMS: 128m
+    volumes:
+      - ./nacos/logs/:/home/nacos/logs
+    ports:
+      - "8488:8848"
+      - "9488:9848"
+      - "9489:9849"
+    networks:
+      my_net:
+        ipv4_address: 172.20.0.23
+
+  powerjob-server:
+    container_name: powerjob-server
+    image: powerjob/powerjob-server:latest
+    restart: always
+    environment:
+      JVMOPTIONS: "-Xmx256m"
+      PARAMS: "
+      --oms.mongodb.enable=false 
+      --spring.datasource.core.jdbc-url=jdbc:mysql://172.20.0.20:3306/powerjob_daily?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+      --spring.datasource.core.username=root
+      --spring.datasource.core.password=L0rfBGXhvrt9f7L8
+      "
+    ports:
+      - "7700:7700"
+      - "10086:10086"
+      - "10010:10010"
+    volumes:
+      - ./powerjob-data/powerjob-server:/root/powerjob/server/
+    networks:
+      my_net:
+        ipv4_address: 172.20.0.24

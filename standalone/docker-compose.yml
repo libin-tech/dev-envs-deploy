@@ -9,11 +9,12 @@ networks:
         - subnet: 172.30.0.0/16
 
 services:
-  # --- MySQL
+
+  # --- MySQL5.7
   mysql-5.7:
-    platform: linux/x86_64
     image: mysql:5.7
     container_name: mysql-5.7
+    restart: always
     environment:
       # 时区上海
       TZ: Asia/Shanghai
@@ -33,18 +34,16 @@ services:
       - ./mysql-5.7/my.cnf:/etc/mysql/my.cnf
     command:
       --init-file /docker-entrypoint-initdb.d/init.sql
-    privileged: true
-    restart: always
     networks:
       my_net:
-        ipv4_address: 172.30.0.33
+        ipv4_address: 172.30.0.10
 
 
-  # --- MySQL
+  # --- MySQL8
   mysql:
-    platform: linux/x86_64
     image: mysql:8.0.27
     container_name: mysql
+    restart: always
     environment:
       # 时区上海
       TZ: Asia/Shanghai
@@ -65,11 +64,9 @@ services:
       - ./mysql/my.cnf:/etc/mysql/my.cnf
     command:
       --init-file /docker-entrypoint-initdb.d/init.sql
-    privileged: true
-    restart: always
     networks:
       my_net:
-        ipv4_address: 172.30.0.36
+        ipv4_address: 172.30.0.11
 
   # ---- Redis
   redis:
@@ -90,7 +87,7 @@ services:
     restart: always
     networks:
       my_net:
-        ipv4_address: 172.30.0.48
+        ipv4_address: 172.30.0.12
 
   # --- MINIO
   minio:
@@ -120,7 +117,7 @@ services:
     restart: always
     networks:
       my_net:
-        ipv4_address: 172.30.0.54
+        ipv4_address: 172.30.0.13
 
   # --- Zookeeper
   zookeeper:
@@ -138,11 +135,11 @@ services:
       - '1812:2181'
     networks:
       my_net:
-        ipv4_address: 172.30.0.15
+        ipv4_address: 172.30.0.14
 
   # --- xxl-job-admin
   xxl-job-admin:
-    image: xuxueli/xxl-job-admin:2.4.0
+    image: xuxueli/xxl-job-admin
     container_name: xxl-job-admin
     environment:
       # 时区上海
@@ -150,7 +147,7 @@ services:
       JAVA_OPTS: '-Xmx512m'
       # 参数
       PARAMS: '
-      --spring.datasource.url=jdbc:mysql://172.30.0.36:3306/xxl_job?Unicode=true&characterEncoding=UTF-8 
+      --spring.datasource.url=jdbc:mysql://172.30.0.10:3306/xxl_job?Unicode=true&characterEncoding=UTF-8 
       --spring.datasource.username=root 
       --spring.datasource.password=L0rfBGXhvrt9f7L8
       --xxl.job.accessToken=WVdSdGFXNDZUREJ5WmtKSFdHaDJjblE1WmpkTU9BPT0=
@@ -164,30 +161,29 @@ services:
       - '9181:8080'
     networks:
       my_net:
-        ipv4_address: 172.30.0.92
+        ipv4_address: 172.30.0.15
 
   # dubbo-admin
   dubbo-admin:
     image: apache/dubbo-admin
     container_name: dubbo-admin
+    restart: always
     environment:
       TZ: Asia/Shanghai
       admin.registry.address: nacos://nacos:8848
       admin.config-center: nacos://nacos:8848
       admin.metadata-report.address: nacos://nacos:8848
-    privileged: true
     ports:
       - '8934:8080'
     networks:
       my_net:
-        ipv4_address: 172.30.0.9
+        ipv4_address: 172.30.0.16
 
   # nacos-server:
   # Nacos2.0版本相比1.X新增了gRPC的通信方式，因此需要增加2个端口。新增端口是在配置的主端口(server.port)基础上，进行一定偏移量自动生成，所以开放的端口如果改动必须按照规定改动，否则会出现连接失败的问题
   # 链接：
   nacos-server:
-    platform: linux/x86_64
-    image: nacos/nacos-server:v2.1.0
+    image: nacos/nacos-server
     container_name: nacos-server
     restart: always
     environment:
@@ -197,7 +193,7 @@ services:
       SPRING_DATASOURCE_PLATFORM: mysql
       # mysql信息配置
       MYSQL_SERVICE_HOST: mysql
-      MYSQL_SERVICE_DB_NAME: nacos_dev
+      MYSQL_SERVICE_DB_NAME: nacos
       MYSQL_SERVICE_PORT: 3306
       MYSQL_SERVICE_USER: root
       MYSQL_SERVICE_PASSWORD: L0rfBGXhvrt9f7L8
@@ -212,7 +208,7 @@ services:
       - "9489:9849"
     networks:
       my_net:
-        ipv4_address: 172.30.0.19
+        ipv4_address: 172.30.0.17
 
   mongodb:
     image: mongo
@@ -231,7 +227,7 @@ services:
     command: [--auth]
     networks:
       my_net:
-        ipv4_address: 172.30.0.20
+        ipv4_address: 172.30.0.18
 
   mongo-express:
     image: mongo-express
@@ -246,18 +242,18 @@ services:
       ME_CONFIG_MONGODB_SERVER: mongodb
     networks:
       my_net:
-        ipv4_address: 172.30.0.21
+        ipv4_address: 172.30.0.19
 
 
   powerjob-server:
+    image: powerjob/powerjob-server
     container_name: powerjob-server
-    image: powerjob/powerjob-server:latest
     restart: always
     environment:
-      JVMOPTIONS: "-Xmx512m"
+      JVMOPTIONS: "-Xmx256m"
       PARAMS: "
       --oms.mongodb.enable=false 
-      --spring.datasource.core.jdbc-url=jdbc:mysql://172.30.0.36:3306/powerjob_daily?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+      --spring.datasource.core.jdbc-url=jdbc:mysql://172.30.0.10:3306/powerjob_daily?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
       --spring.datasource.core.username=root
       --spring.datasource.core.password=L0rfBGXhvrt9f7L8
       "
@@ -269,4 +265,4 @@ services:
       - ./powerjob-data/powerjob-server:/root/powerjob/server/
     networks:
       my_net:
-        ipv4_address: 172.30.0.22
+        ipv4_address: 172.30.0.20
